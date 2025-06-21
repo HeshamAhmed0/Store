@@ -1,4 +1,5 @@
 
+using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -6,7 +7,7 @@ namespace Store.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,18 @@ namespace Store.API
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             var app = builder.Build();
+
+
+
+            #region DataSeeding
+            var Scope =app.Services.CreateScope();
+            var DbInitializer=Scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            await DbInitializer.InitializeAsync();
+            #endregion
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
