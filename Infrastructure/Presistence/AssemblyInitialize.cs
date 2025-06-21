@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Persistence
 {
-    public class ProductBrand :BaseEntity<int>
+    public class AssemblyInitialize
     {
-        public string Name { get; set; }
     }
 }
