@@ -2,6 +2,9 @@
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Reposatory;
+using Services;
+using Services_Absractions;
 
 namespace Store.API
 {
@@ -22,6 +25,10 @@ namespace Store.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.AddScoped<IServiceManager,ServicesManager>();
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(AssemplyReference).Assembly);
+            
             var app = builder.Build();
 
 

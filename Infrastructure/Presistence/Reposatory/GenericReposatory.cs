@@ -29,6 +29,19 @@ namespace Persistence.Reposatory
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(bool TrackChanges = false)
         {
+            if (typeof(TEntity) == typeof(Product))
+            {
+                if (TrackChanges)
+                {
+                    return await storeDbContext.Products.Include(P=>P.ProductType).Include(P=>P.ProductBrand).ToListAsync() as IEnumerable<TEntity>;
+                }
+                else
+                {
+                    return await storeDbContext.Products.Include(P => P.ProductType).Include(P => P.ProductBrand).AsNoTracking().ToListAsync() as IEnumerable<TEntity>;
+                }
+
+            }
+
            if(TrackChanges)
             {
                return await storeDbContext.Set<TEntity>().ToListAsync();
@@ -39,9 +52,18 @@ namespace Persistence.Reposatory
             }
         }
 
-        public async Task GetByID(int id)
+        public async Task<TEntity> GetByID(int id)
         {
-           await storeDbContext.Set<TEntity>().FindAsync(id);
+            if (typeof(TEntity) == typeof(Product))
+            {
+             var result =   await storeDbContext.Products.Include(p=>p.ProductBrand).Include(p=>p.ProductType).FirstOrDefaultAsync(p=>p.Id==id) ;
+                return result as TEntity;
+            }
+            else
+            {
+              return  await storeDbContext.Set<TEntity>().FindAsync(id);
+            }
+          
         }
 
         public void Update(TEntity entity)
