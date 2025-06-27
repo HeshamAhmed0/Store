@@ -21,4 +21,25 @@
     <ProjectReference Include="..\Infrastructure\Presistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="WWWRoot\images\products\CheesyVegetableLasagna.png" />
+    <None Include="WWWRoot\images\products\ChickenMarsala.png" />
+    <None Include="WWWRoot\images\products\ChickenTeriyakiNoodles.png" />
+    <None Include="WWWRoot\images\products\ChickenTikkaMasala.jpg" />
+    <None Include="WWWRoot\images\products\Congee.png" />
+    <None Include="WWWRoot\images\products\CreamyGochujangTortellini.png" />
+    <None Include="WWWRoot\images\products\CrispyVegetablePakoras.png" />
+    <None Include="WWWRoot\images\products\HaluskiNoodles.png" />
+    <None Include="WWWRoot\images\products\HeartyVegetableLasagna.png" />
+    <None Include="WWWRoot\images\products\ItalianChickenMarinade.png" />
+    <None Include="WWWRoot\images\products\ItalianWeddingSoup.png" />
+    <None Include="WWWRoot\images\products\Kulfi.png" />
+    <None Include="WWWRoot\images\products\PastaSalad.png" />
+    <None Include="WWWRoot\images\products\PepperPasta.png" />
+    <None Include="WWWRoot\images\products\ShrimpEggFooYoung.png" />
+    <None Include="WWWRoot\images\products\TandooriChicken.png" />
+    <None Include="WWWRoot\images\products\VegetarianKorma.png" />
+    <None Include="WWWRoot\images\products\VegetarianRefriedBeans.png" />
+  </ItemGroup>
+
 </Project>

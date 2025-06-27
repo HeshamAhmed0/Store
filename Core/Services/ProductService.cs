@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
+using Persistence;
+using Services.Sepcification;
 using Services_Absractions;
 using Shared;
 
@@ -30,7 +32,8 @@ namespace Services
 
         public async Task<IEnumerable<ProductResultDto>> GetAllProductAsync()
         {
-           var product=await unitOfWork.GenericReposatory<Product, int>().GetAllAsync();
+            var spec = new ProductWithBrandsAndTypesSpecification();
+           var product=await unitOfWork.GenericReposatory<Product, int>().GetAllAsync(spec);
            
             var result =mapper.Map<IEnumerable<ProductResultDto>>(product);
 
@@ -47,7 +50,8 @@ namespace Services
 
         public async Task<ProductResultDto?> GetProductAsync(int id)
         {
-            var product =await unitOfWork.GenericReposatory<Product,int>().GetByID(id);
+            var spec=new ProductWithBrandsAndTypesSpecification(id);
+            var product =await unitOfWork.GenericReposatory<Product,int>().GetByID(spec);
             if (product == null) return null;
             var result = mapper.Map<ProductResultDto>(product);
             return result;

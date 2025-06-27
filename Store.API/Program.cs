@@ -39,6 +39,7 @@ namespace Store.API
             await DbInitializer.InitializeAsync();
             #endregion
 
+            app.UseStaticFiles();
 
 
             // Configure the HTTP request pipeline.

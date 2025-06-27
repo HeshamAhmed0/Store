@@ -52,6 +52,11 @@ namespace Persistence.Reposatory
             }
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity, Tkey> spec, bool TrackChanges = false)
+        {
+           return await ApplyQuery(spec).ToListAsync();
+        }
+
         public async Task<TEntity> GetByID(int id)
         {
             if (typeof(TEntity) == typeof(Product))
@@ -66,9 +71,19 @@ namespace Persistence.Reposatory
           
         }
 
+        public async Task<TEntity> GetByID(ISpecification<TEntity, Tkey> spec)
+        {
+            return await ApplyQuery(spec).FirstOrDefaultAsync();
+        }
+
         public void Update(TEntity entity)
         {
            storeDbContext.Set<TEntity>().Update(entity);
+        }
+
+        private IQueryable<TEntity> ApplyQuery(ISpecification<TEntity, Tkey> spec)
+        {
+            return SpecificationEvaluator.GetQuery<TEntity, Tkey>(storeDbContext.Set<TEntity>(), spec);
         }
     }
 }
