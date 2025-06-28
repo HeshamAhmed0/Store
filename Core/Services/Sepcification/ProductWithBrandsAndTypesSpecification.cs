@@ -14,7 +14,12 @@ namespace Services.Sepcification
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
         }
-        public ProductWithBrandsAndTypesSpecification():base(null)
+        public ProductWithBrandsAndTypesSpecification(int? BrandId, int? TypeId) 
+            :base( 
+                 p=>(!BrandId.HasValue || p.BrandId==BrandId)&&
+                    (!TypeId.HasValue || p.TypeId == TypeId)
+                 
+                  )
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
