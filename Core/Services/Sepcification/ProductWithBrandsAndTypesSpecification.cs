@@ -50,6 +50,10 @@ namespace Services.Sepcification
                         break;
                 }
             }
+            else
+            {
+                AddOrderBy(P => P.Name);
+            }
         }
         protected void ApplyPagination(int PSize,int PIndex)
         {
