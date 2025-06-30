@@ -14,7 +14,7 @@ namespace Services.Sepcification
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
         }
-        public ProductWithBrandsAndTypesSpecification(int? BrandId, int? TypeId) 
+        public ProductWithBrandsAndTypesSpecification(int? BrandId, int? TypeId, string? Sort, int PSize, int PIndex) 
             :base( 
                  p=>(!BrandId.HasValue || p.BrandId==BrandId)&&
                     (!TypeId.HasValue || p.TypeId == TypeId)
@@ -23,7 +23,39 @@ namespace Services.Sepcification
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
+            ApplySorting(Sort);
+            ApplyPagination(PSize,PIndex);
         }
 
+        protected void ApplySorting(string? sort)
+        {
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch(sort.ToLower())
+                {
+                    case "nameasc":
+                        AddOrderBy(p => p.Name);
+                        break;
+                    case "namedesc":
+                        AddOrderByDesc(P=>P.Name); 
+                        break;
+                    case "priceasc":
+                        AddOrderBy(P => P.Price);
+                         break;
+                    case "pricedesc":
+                        AddOrderByDesc(P => P.Price);
+                        break;
+                    default:
+                        AddOrderBy(P => P.Name);
+                        break;
+                }
+            }
+        }
+        protected void ApplyPagination(int PSize,int PIndex)
+        {
+            Ispagination = true;
+            Take = PSize;
+            Skip= (PIndex-1)*PSize;
+        }
     }
 }

@@ -20,7 +20,23 @@ namespace Persistence
                 query = query.Where(spec.Critiacal);
                 
             }
+           if(spec.OrderBy is not null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+           if(spec.OrderByDesc is not null)
+            {
+                query = query.OrderByDescending(spec.OrderBy);
+            }
+
+           if(spec.Ispagination == true)
+            {
+                query=query.Skip(spec.Skip).Take(spec.Take);
+            }
+
             query = spec.IncludeExpression.Aggregate(query, (currentQuery, IncludeQuery) => currentQuery.Include(IncludeQuery));
+
+
 
             return query;
         }
