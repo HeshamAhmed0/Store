@@ -19,6 +19,7 @@ namespace Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyInitialize).Assembly);
             base.OnModelCreating(modelBuilder);
         }
+      
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }

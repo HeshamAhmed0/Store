@@ -22,6 +22,11 @@ namespace Persistence.Reposatory
              await storeDbContext.AddAsync(entity);
         }
 
+        public async Task<int> CountAsync(ISpecification<TEntity, Tkey> specification)
+        {
+            return await ApplyQuery(specification).CountAsync();
+        }
+
         public  void Delete(TEntity entity)
         {
             storeDbContext.Remove(entity);

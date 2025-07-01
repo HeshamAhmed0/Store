@@ -14,6 +14,7 @@ namespace Domain.Contracts
         public Task<TEntity> GetByID(int id);
         public Task<TEntity> GetByID(ISpecification<TEntity, Tkey> spec);
         public Task Add(TEntity entity);
+        public Task<int> CountAsync(ISpecification<TEntity,Tkey> specification );
         public void Update(TEntity entity);
         public void Delete(TEntity entity);
 
