@@ -1,10 +1,13 @@
 
 using Domain.Contracts;
+using Domain.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Reposatory;
 using Services;
 using Services_Absractions;
+using Store.API.Middelware;
 
 namespace Store.API
 {
@@ -30,10 +33,30 @@ namespace Store.API
             builder.Services.AddScoped<IServiceManager,ServicesManager>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(AssemplyReference).Assembly);
-            
+
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                  var ErrorResponse=  actionContext.ModelState.Where(m => m.Value.Errors.Any()).
+                                            Select(m => new ValidationError()
+                                            {
+                                                Field=m.Key,
+                                                Errors=m.Value.Errors.Select(e=>e.ErrorMessage).ToList(),
+
+                                            }).ToList();
+
+                    var response = new ValidationErrorResponse()
+                    {
+                        errors = ErrorResponse,
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            });
+
             var app = builder.Build();
 
-
+            app.UseMiddleware<GlobalHandleErroeMiddleware>();
 
             #region DataSeeding
             var Scope =app.Services.CreateScope();

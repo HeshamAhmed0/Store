@@ -9,7 +9,7 @@ using Shared;
 
 namespace Presentation
 {
-    [Controller]
+    [ApiController]
     [Route("api/[controller]")]
     public class ProductsController(IServiceManager serviceManager) :ControllerBase
     {
@@ -24,7 +24,6 @@ namespace Presentation
         public async Task<IActionResult> GetProductById(int id)
         {
             var Product =await serviceManager.ProductServices.GetProductAsync(id);
-            if (Product == null) return BadRequest();
             return Ok(Product);
         }
         [HttpGet("GetAllBrands")]

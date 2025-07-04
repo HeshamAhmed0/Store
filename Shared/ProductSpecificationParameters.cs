@@ -24,7 +24,7 @@ namespace Shared
 
         public int PageIndex
         {
-            get { return _PageIndex=1; }
+            get { return _PageIndex; }
             set { _PageIndex = value; }
         }
 

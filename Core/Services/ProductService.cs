@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
+using Domain.Exceptions;
 using Domain.Models;
 using Persistence;
 using Services.Sepcification;
@@ -57,7 +58,7 @@ namespace Services
         {
             var spec=new ProductWithBrandsAndTypesSpecification(id);
             var product =await unitOfWork.GenericReposatory<Product,int>().GetByID(spec);
-            if (product == null) return null;
+            if (product == null) throw new ProductNotFoundException(id);
             var result = mapper.Map<ProductResultDto>(product);
             return result;
         }
