@@ -38,6 +38,8 @@ namespace Store.API.Middelware
                 {
                     ErrorMessage = ex.Message
                 };
+
+
                 response.StatusCode = ex switch
                 {
                    NotFoundExceptions => StatusCodes.Status404NotFound,
