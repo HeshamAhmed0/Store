@@ -15,6 +15,7 @@ namespace Store.API.Extentions.ApplyForAllServices_After_built
 
             app.UseStaticFiles();
 
+            //2
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
