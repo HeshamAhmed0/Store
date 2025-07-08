@@ -13,6 +13,7 @@ namespace Store.API.Extentions.Infrustructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICachReposatory, CachReposatory>();
             services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
