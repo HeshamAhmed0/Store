@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Attributes;
 using Services_Absractions;
 using Shared;
 
@@ -11,10 +12,12 @@ namespace Presentation
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     public class ProductsController(IServiceManager serviceManager) :ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts(ProductSpecificationParameters SpecParams)
+        [Cach(100)]
+        public async Task<IActionResult> GetAllProducts([FromQuery]ProductSpecificationParameters SpecParams)
         {
             var product = await serviceManager.ProductServices.GetAllProductAsync( SpecParams);
             if (product == null) return BadRequest();
