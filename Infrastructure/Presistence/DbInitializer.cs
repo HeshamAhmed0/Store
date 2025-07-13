@@ -6,17 +6,31 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Models;
+using Domain.Models.Identity;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Identity;
 
 namespace Persistence
 {
     public class DbInitializer : IDbInitializer
     {
         private readonly StoreDbContext storeDbContext;
+        private readonly StoreIdentityDbContext storeIdentityDbContext;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager;
 
-        public DbInitializer(StoreDbContext storeDbContext)
+        public DbInitializer(StoreDbContext storeDbContext,
+                             StoreIdentityDbContext storeIdentityDbContext,
+                             Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager,
+                             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager
+                              )
         {
             this.storeDbContext = storeDbContext;
+            this.storeIdentityDbContext = storeIdentityDbContext;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
         public async Task InitializeAsync()
         {
@@ -58,6 +72,49 @@ namespace Persistence
                     await storeDbContext.SaveChangesAsync();
                 }
             }
+        }
+
+        public async Task InitializeIdentityAsync()
+        {
+
+            if (storeIdentityDbContext.Database.GetPendingMigrations().Any())
+            {
+                await storeIdentityDbContext.Database.MigrateAsync();
+            }
+            if (!roleManager.Roles.Any())
+            {
+                await roleManager.CreateAsync(new IdentityRole()
+                {
+                    Name = "Admin"
+                });
+                await roleManager.CreateAsync(new IdentityRole()
+                {
+                    Name = "SuperAdmin"
+                });
+            }
+            if (!userManager.Users.Any())
+            {
+                var SuperAdmin = new AppUser()
+                {
+                    DisplayName = "Super Admin",
+                    Email = "superadmin@gmail.com",
+                    UserName = "SuperAdmin",
+                    PhoneNumber = "01503032660"
+                };
+                var Admin = new AppUser()
+                {
+                    DisplayName = " Admin",
+                    Email = "admin@gmail.com",
+                    UserName = "Admin",
+                    PhoneNumber = "01500049390"
+                };
+                await userManager.CreateAsync(SuperAdmin, "HeshamAhmed1#");
+                await userManager.CreateAsync(Admin, "HeshamAhmed1#");
+
+                await userManager.AddToRoleAsync(SuperAdmin, "SuperAdmin");
+                await userManager.AddToRoleAsync(Admin, "Admin");
+            }
+           
         }
     }
 }

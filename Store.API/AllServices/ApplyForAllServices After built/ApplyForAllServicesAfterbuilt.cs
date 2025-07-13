@@ -39,6 +39,7 @@ namespace Store.API.Extentions.ApplyForAllServices_After_built
             var Scope = app.Services.CreateScope();
             var DbInitializer = Scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await DbInitializer.InitializeAsync();
+            await DbInitializer.InitializeIdentityAsync();
         }
     }
 }

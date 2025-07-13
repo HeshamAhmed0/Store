@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Persistence.Reposatory;
 using Persistence;
 using StackExchange.Redis;
+using Persistence.Identity;
+using Domain.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Store.API.Extentions.Infrustructure
 {
@@ -18,10 +21,15 @@ namespace Store.API.Extentions.Infrustructure
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+            });
             services.AddSingleton<IConnectionMultiplexer>((serviceprovider) =>
             {
                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
             });
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreIdentityDbContext>();
             return services;
         }
     }
