@@ -11,5 +11,6 @@ namespace Services_Absractions
         public IProductServices ProductServices { get; }
         public IBasketService BasketService { get; }
         public ICachService CachService { get; }
+        public IAuthService AuthService { get; }
     }
 }
