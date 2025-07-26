@@ -6,6 +6,10 @@ using StackExchange.Redis;
 using Persistence.Identity;
 using Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Shared;
+using System.Text;
 
 namespace Store.API.Extentions.Infrustructure
 {
@@ -30,6 +34,28 @@ namespace Store.API.Extentions.Infrustructure
                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
             });
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+            #region JWT Tooken
+            var JwtOptions = configuration.GetSection("JWTOptions").Get<JwtOptions>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+
+
+                    ValidIssuer = JwtOptions.Issuer,
+                    ValidAudience = JwtOptions.Audiences,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.SecurityKey)),
+                };
+            }); 
+            #endregion
             return services;
         }
     }

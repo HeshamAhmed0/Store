@@ -7,7 +7,9 @@ using AutoMapper;
 using Domain.Contracts;
 using Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Services_Absractions;
+using Shared;
 
 namespace Services
 {
@@ -15,7 +17,8 @@ namespace Services
                                  ,IUnitOfWork unitOfWork
                                  ,IBasketRepository basketRepository 
                                  ,ICachReposatory cachReposatory
-                                 ,UserManager<AppUser> userManager
+                                 ,UserManager<AppUser> userManager,
+                                 IOptions<JwtOptions> options
                                 ) : IServiceManager
     {
         public IProductServices ProductServices {  get;} =new ProductService(mapper,unitOfWork);
@@ -24,6 +27,6 @@ namespace Services
 
         public ICachService CachService { get; } = new CashServices(cachReposatory);
 
-        public IAuthService AuthService { get; } = new AuthService(userManager);
+        public IAuthService AuthService { get; } = new AuthService(userManager,options);
     }
 }

@@ -29,7 +29,7 @@ namespace Services
             var Brands =await unitOfWork.GenericReposatory<ProductBrand,int>().GetAllAsync();
             var result =mapper.Map<IEnumerable<BrandResultDto>>(Brands);
             return result;
-        }
+        } 
 
         public async Task<ProducePadinationResponse<ProductResultDto>> GetAllProductAsync(ProductSpecificationParameters SpecParams)
         {

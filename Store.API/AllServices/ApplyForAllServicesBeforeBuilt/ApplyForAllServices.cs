@@ -1,5 +1,6 @@
 ﻿using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using Store.API.Extentions.Infrustructure;
 using Store.API.Extentions.MidelwareServices;
 using Store.API.Extentions.Services;
@@ -20,7 +21,7 @@ namespace Store.API.Extentions.ApplyForAllServices
             services.InfrustructureServises(configuration);
             services.ApplyAllicationServices();
             ValidationConfigrationServices(services);
-
+            services.Configure<JwtOptions>(configuration.GetSection("JWTOptions"));
             return services;
         }
 
@@ -37,7 +38,6 @@ namespace Store.API.Extentions.ApplyForAllServices
                                                   Errors = m.Value.Errors.Select(e => e.ErrorMessage).ToList(),
 
                                               }).ToList();
-
                     var response = new ValidationErrorResponse()
                     {
                         errors = ErrorResponse,

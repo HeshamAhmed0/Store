@@ -25,7 +25,7 @@ namespace Store.API.Extentions.ApplyForAllServices_After_built
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

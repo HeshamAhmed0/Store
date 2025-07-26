@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Attributes;
 using Services_Absractions;
@@ -17,6 +18,7 @@ namespace Presentation
     {
         [HttpGet]
         [Cach(100)]
+        [Authorize]
         public async Task<IActionResult> GetAllProducts([FromQuery]ProductSpecificationParameters SpecParams)
         {
             var product = await serviceManager.ProductServices.GetAllProductAsync( SpecParams);
