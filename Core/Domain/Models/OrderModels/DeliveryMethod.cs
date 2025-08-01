@@ -12,7 +12,7 @@ namespace Domain.Models.OrderModels
         {
         }
 
-        public DeliveryMethod(string shortName, string description, decimal cost, int deliveryTime)
+        public DeliveryMethod(string shortName, string description, decimal cost, string deliveryTime)
         {
             ShortName = shortName;
             Description = description;
@@ -23,6 +23,6 @@ namespace Domain.Models.OrderModels
         public string ShortName { get; set; }
         public string Description { get; set; }
         public decimal Cost { get; set; }
-        public int DeliveryTime { get; set; }
+        public string DeliveryTime { get; set; }
     }
 }

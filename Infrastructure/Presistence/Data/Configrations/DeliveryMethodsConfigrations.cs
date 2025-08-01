@@ -13,8 +13,6 @@ namespace Persistence.Data.Configrations
     {
         public void Configure(EntityTypeBuilder<DeliveryMethod> builder)
         {
-            builder.Property(C => C.Cost).
-                    HasColumnType("decimal(2,2)");
         }
     }
 }

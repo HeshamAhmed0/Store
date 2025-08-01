@@ -27,6 +27,8 @@ namespace Services
 
         public ICachService CachService { get; } = new CashServices(cachReposatory);
 
-        public IAuthService AuthService { get; } = new AuthService(userManager,options);
+        public IAuthService AuthService { get; } = new AuthService(mapper,userManager,options);
+
+        public IOrderService OrderService { get; } = new OrderService(unitOfWork,mapper,basketRepository);
     }
 }

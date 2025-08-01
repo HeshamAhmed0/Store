@@ -5,16 +5,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services_Absractions;
 using Shared;
+using Shared.OrderDtos;
 
 namespace Services
 {
-    public class AuthService(UserManager<AppUser> userManager,IOptions<JwtOptions> options) : IAuthService
+    public class AuthService(IMapper mapper,UserManager<AppUser> userManager,IOptions<JwtOptions> options) : IAuthService
     {
         public async Task<LoginResultDto> LoginAsync(LoginDto loginDto)
         {
@@ -33,6 +36,8 @@ namespace Services
 
         public async Task<LoginResultDto> RegisterAsync(RegisterDto registerDto)
         {
+            var Check= await CheckEmailExistsAsync(registerDto.Email);
+            if(Check == true) throw new Exception($"There Are User With Email {registerDto.Email}");
             var user = new AppUser()
             {
                 DisplayName = registerDto.DisplayName,
@@ -77,5 +82,45 @@ namespace Services
            
         }
 
+        public async Task<bool> CheckEmailExistsAsync(string email)
+        {
+           var user= await userManager.FindByEmailAsync(email);
+            return user != null;  
+        }
+
+        public async Task<LoginResultDto> GetCurrentUserAsync(string email)
+        {
+            var User =await userManager.FindByEmailAsync(email);
+            if (User is null) throw new Exception("User Not Found");
+            return new LoginResultDto()
+            {
+                DispalyName = User.DisplayName,
+                Email = User.Email,
+                Tooken = await GenerateJwtTooken(User)
+            };
+
+        }
+
+        public async Task<OrderAdressDto> GetCurrentUserAddressAsync(string email)
+        {
+            var UserAddress =await userManager.Users.Include(A=>A.Address).FirstOrDefaultAsync(U => U.Email == email);
+            if (UserAddress is null) throw new Exception("There Are Not User ");
+            var result =mapper.Map<OrderAdressDto>(UserAddress);
+            return result;
+        }
+
+        public async Task<OrderAdressDto> UpdateCurrentUserAddressAsync(OrderAdressDto orderAdressDto, string email)
+        {
+            var UserAddress = await userManager.Users.Include(A => A.Address).FirstOrDefaultAsync(U => U.Email == email);
+            if (UserAddress is null) throw new Exception("There Are Not User ");
+            UserAddress.Address.FirstName=orderAdressDto.FirstName;
+            UserAddress.Address.LastName=orderAdressDto.LastName;
+            UserAddress.Address.City=orderAdressDto.City;
+            UserAddress.Address.Country=orderAdressDto.Country;
+
+            await userManager.UpdateAsync(UserAddress);
+            var result = mapper.Map<OrderAdressDto>(UserAddress);
+            return result;
+        }
     }
 }

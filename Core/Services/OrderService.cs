@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Domain.Contracts;
 using Domain.Models;
 using Domain.Models.OrderModels;
 using Persistence.Reposatory;
@@ -14,7 +15,7 @@ using StackExchange.Redis;
 
 namespace Services
 {
-    public class OrderService(UnitOfWork unitOfWork,IMapper mapper,BasketRepository basketRepository) : IOrderService
+    public class OrderService(IUnitOfWork unitOfWork,IMapper mapper,IBasketRepository basketRepository) : IOrderService
     {
         public async Task<OrderResultDto> CreateOrderAsync(OrderReqestDto orderRequest, string UserEmail)
         {

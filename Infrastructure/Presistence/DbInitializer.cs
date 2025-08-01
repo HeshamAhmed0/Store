@@ -80,7 +80,15 @@ namespace Persistence
                 if (delivery is not null && delivery.Any())
                 {
                     await storeDbContext.DeliveryMethods.AddRangeAsync(delivery);
-                    await storeDbContext.SaveChangesAsync();
+                    try
+                    {
+                        await storeDbContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Console.WriteLine(ex.InnerException?.Message);
+                    }
+
                 }
             }
         }
