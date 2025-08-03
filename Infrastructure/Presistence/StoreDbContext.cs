@@ -20,7 +20,11 @@ namespace Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyInitialize).Assembly);
             base.OnModelCreating(modelBuilder);
         }
-      
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
